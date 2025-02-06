@@ -2,7 +2,6 @@ FROM alpine:3.20
 ENTRYPOINT ["/sbin/tini","--","/usr/local/searxng/dockerfiles/docker-entrypoint.sh"]
 EXPOSE 8080
 
-
 ARG SEARXNG_GID=977
 ARG SEARXNG_UID=977
 
@@ -47,6 +46,14 @@ RUN apk add --no-cache -t build-dependencies \
  && pip3 install --break-system-packages --no-cache -r requirements.txt \
  && apk del build-dependencies \
  && rm -rf /root/.cache
+
+# Ensure /etc/searxng directory exists and has the necessary config files
+RUN mkdir -p /etc/searxng && \
+    touch /etc/searxng/settings.yml /etc/searxng/uwsgi.ini
+
+# If you have custom settings, copy them here
+COPY --chown=searxng:searxng settings.yml /etc/searxng/settings.yml
+COPY --chown=searxng:searxng uwsgi.ini /etc/searxng/uwsgi.ini
 
 COPY --chown=searxng:searxng dockerfiles ./dockerfiles
 COPY --chown=searxng:searxng searx ./searx
