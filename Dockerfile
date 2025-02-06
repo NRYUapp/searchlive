@@ -13,8 +13,8 @@ ENV INSTANCE_NAME=searxng \
     BASE_URL= \
     MORTY_KEY= \
     MORTY_URL= \
-    SEARXNG_SETTINGS_PATH=/etc/searxng/settings.yml \
-    UWSGI_SETTINGS_PATH=/etc/searxng/uwsgi.ini \
+    SEARXNG_SETTINGS_PATH= \
+    UWSGI_SETTINGS_PATH= \
     UWSGI_WORKERS=%k \
     UWSGI_THREADS=4
 
@@ -47,18 +47,11 @@ RUN apk add --no-cache -t build-dependencies \
  && apk del build-dependencies \
  && rm -rf /root/.cache
 
-# Ensure /etc/searxng directory exists and has the necessary config files
-RUN mkdir -p /etc/searxng && \
-    touch /etc/searxng/settings.yml /etc/searxng/uwsgi.ini
-RUN apk add --no-cache uwsgi-python3
-
-
-# If you have custom settings, copy them here
-COPY --chown=searxng:searxng settings.yml /etc/searxng/settings.yml
-COPY --chown=searxng:searxng uwsgi.ini /etc/searxng/uwsgi.ini
-
 COPY --chown=searxng:searxng dockerfiles ./dockerfiles
 COPY --chown=searxng:searxng searx ./searx
+
+COPY --chown=searxng:searxng utils/templates/etc/searxng/settings.yml /etc/searxng/settings.yml
+COPY --chown=searxng:searxng dockerfiles/uwsgi.ini /etc/searxng/uwsgi.ini
 
 ARG TIMESTAMP_SETTINGS=0
 ARG TIMESTAMP_UWSGI=0
