@@ -50,6 +50,8 @@ RUN apk add --no-cache -t build-dependencies \
 # Ensure /etc/searxng directory exists and has the necessary config files
 RUN mkdir -p /etc/searxng && \
     touch /etc/searxng/settings.yml /etc/searxng/uwsgi.ini
+RUN apk add --no-cache uwsgi-python3
+
 
 # If you have custom settings, copy them here
 COPY --chown=searxng:searxng settings.yml /etc/searxng/settings.yml
