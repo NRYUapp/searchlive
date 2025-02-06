@@ -13,7 +13,7 @@ search:
 server:
   # Is overwritten by ${SEARXNG_SECRET}
   secret_key: "1234567890"
-  limiter: true
+  limiter: false
   image_proxy: true
   # public URL of the instance, to ensure correct inbound links. Is overwritten
   # by ${SEARXNG_URL}.
@@ -21,10 +21,10 @@ server:
 
 redis:
   # URL to connect redis database. Is overwritten by ${SEARXNG_REDIS_URL}.
-  url: unix:///usr/local/searxng-redis/run/redis.sock?db=0
+  url: false
 
 ui:
-  static_use_hash: true
+  static_use_hash: false
 
 # preferences:
 #   lock:
